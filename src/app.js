@@ -95,7 +95,7 @@ app.get("/productos/:id", (req, res) => {
 app.get("/product", (req, res) => {
     let limit = parseInt(req.query.limit);
     console.log(typeof limit)
-
+    //slice devuelve una cantidad determinada del array
     let productos = misProductos.slice(0, limit);
     if (limit) {
         res.send(misProductos.slice(0, limit))
