@@ -17,3 +17,4 @@ module.exports = {
     division,
 }
 probando mergear rama
+ramadeclase6 mergeada correctamente
