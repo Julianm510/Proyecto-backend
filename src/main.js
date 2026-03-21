@@ -346,3 +346,19 @@ console.log(operaciones.suma(10, 5));
 console.log(operaciones.resta(25, 10));
 console.log(operaciones.multi(2, 5));
 console.log(operaciones.division(10, 5));
+
+//1) instalamos modulos de terceros desde la terminal con el comando "npm install nombreModulo"
+//npm install moment
+//npm install express
+
+//Si las quiero borrar: npm uninstall moment
+
+//Instalamos dependencias de desarrollo(la vamos a usar solo en la etapa de desarrollo)
+//EJ: npm nodemon -D (dependencia de desarrollo)
+//scripts son comandos que podemos colocar y personalizar a nuestro gusto en package.json ej:"dev" en package.json le ponemos la ruta de lo que queremos abrir por ej: npm run dev y el path: src/main.js
+
+//instalacion de forma globarl npm install -g y modulo que queres instalar
+//listado de instalaciones globales npm list -g
+//npm outdated/outdate -g (globales)(para ver que dependencias estan desactualizadas)
+//npm update te actualiza todo el listado y te lo pasa a la wanted(buscada)
+//la mejor forma es npm i dependencia@latests
