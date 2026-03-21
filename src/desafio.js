@@ -73,22 +73,47 @@ class ProductManager {
         }
     }
 
+    async updateProduct(id, updateFields) {
+        try {
+            const data = await fs.readFile(this.path, "utf-8");
+            const products = JSON.parse(data);
 
-    async deleteProduct(id) {
-        const productos = await this.getProducts();
-        const nuevosProducts = productos.filter(item => item.id !== id)
+            const index = products.find(p => p.id === id)
+            if (!index) console.log("producto no encontrado")
 
 
-        if (productos.length === nuevosProducts.length) {
-            console.log("producto no encontrado")
-        } else { console.log("producto eliminado", nuevosProducts) }
 
-        await this.saveProducts(nuevosProducts);
+            products[index] = {
+                ...products[index],
+                ...updateFields
+            }
 
+            await fs.readFile("./productos.json", JSON.stringify(products, null, 2))
+            console.log("producto actualizado correctamente");
+
+
+
+        } catch (error) {
+            console.log(`no se pudo actualizar el producto`)
+        }
     }
 
-
 }
+
+
+// const productos = await this.getProducts();
+// const nuevosProducts = productos.filter(item => item.id !== id)
+
+
+// if (productos.length === nuevosProducts.length) {
+//     console.log("producto no encontrado")
+// } else { console.log("producto eliminado", nuevosProducts) }
+
+// await this.saveProducts(nuevosProducts);
+
+
+
+
 
 // try {
 //     await fs.unlink("./productos.json");
@@ -102,8 +127,8 @@ const manager = new ProductManager("./productos.json")
 
 
 // await manager.addProduct("Producto prueba", "este es un producto de prueba", 500, "no img", "abc123", 25)
-// await manager.addProduct("fideos", "mostacholes", 1000, "no img", "abc128", 55)
-// await manager.addProduct("arroz", "doble carolina", 1500, "no img", "abc125", 55)
+await manager.addProduct("fideos", "mostacholes", 1000, "no img", "abc128", 55)
+await manager.addProduct("arroz", "doble carolina", 1500, "no img", "abc125", 55)
 // await manager.addProduct("mostacholes", 1000, "no img", "abc124", 55)
 // await manager.addProduct("arroz", "doble carolina", 1500, "no img", "abc120", 55)
 // await manager.addProduct("arroz gallo", "doble carolina", 1500, "no img", "abc127", 70)
@@ -111,7 +136,11 @@ const manager = new ProductManager("./productos.json")
 
 
 
-// console.log(await manager.getProduct())
+console.log(await manager.getProduct())
 
-await manager.getProductById(0)
-await manager.deleteProduct(1)
+// await manager.getProductById(0)
+// await manager.deleteProduct(1)
+await manager.updateProduct(1, {
+    price: 5000,
+    stock: 20
+});

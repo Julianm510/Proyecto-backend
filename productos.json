@@ -1,20 +1,20 @@
 [
   {
     "id": 0,
-    "title": "Producto prueba",
-    "description": "este es un producto de prueba",
-    "price": 500,
+    "title": "fideos",
+    "description": "mostacholes",
+    "price": 1000,
     "img": "no img",
-    "code": "abc123",
-    "stock": 25
+    "code": "abc128",
+    "stock": 55
   },
   {
-    "id": 3,
+    "id": 1,
     "title": "arroz",
     "description": "doble carolina",
     "price": 1500,
     "img": "no img",
-    "code": "abc120",
+    "code": "abc125",
     "stock": 55
   }
 ]
