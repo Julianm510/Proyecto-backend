@@ -42,6 +42,7 @@
 //importando con Module (debemos agregar "type": "module" en package.json)
 
 import express from "express";
+import fs from "fs";
 const app = express();
 const PUERTO = 8080;
 //sino - const express = require("express"); (Common JS)
@@ -64,6 +65,26 @@ const clientes = [
     { id: 5, nombre: "Angus", apellido: "Young" },
 
 ]
+
+
+
+const archivoClientes = "./clientes.json"
+
+const guardarArchivo = async () => {
+    await fs.promises.writeFile(archivoClientes, JSON.stringify(clientes, null, 2))
+}
+guardarArchivo();
+
+const leerArchivo = async () => {
+    const respuesta = await fs.promises.readFile(archivoClientes, "utf-8");
+    const nuevoArray = JSON.parse(respuesta);
+    console.log(nuevoArray)
+}
+
+leerArchivo();
+
+
+
 
 //Rutas
 
@@ -183,3 +204,35 @@ app.listen(PUERTO, () => {
     console.log(`escuchando en el http://localhost:${PUERTO}`);
 })
 
+//manejo de datos complejos
+
+//desarrollamos un array de personas:
+
+// const arrayPersonas = [
+//     { nombre: "Pepe", apellido: "Argento", edad: 50 },
+//     { nombre: "Moni", apellido: "Argento", edad: 40 },
+//     { nombre: "Coky", apellido: "Argento", edad: 17 },
+//     { nombre: "Paola", apellido: "Argento", edad: 15 }, { nombre: "Fatiga", apellido: "Argento", edad: 9 }
+
+// ]
+
+// const archivoArgento = "./archivo-argento.json"
+
+// //De esta forma lo guardamos
+// const guardarArchivos = async () => {
+//     await fs.promises.writeFile(archivoArgento, JSON.stringify(arrayPersonas, null, 2))
+
+// }
+
+// guardarArchivos();
+
+
+
+//lo recuperamos:
+
+// const leerArchivos = async () => {
+//     const respuesta = await fs.promises.readFile(archivoArgento, "utf-8");
+//     const nuevoArray = JSON.parse(respuesta);
+//     console.log(nuevoArray)
+// }
+// leerArchivos();
