@@ -2,11 +2,12 @@
   "name": "entrega-backend-samu",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "clase-7.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/main.js",
-    "start": "node src/main.js"
+    "dev": "nodemon src/clase-7.js",
+    "start": "node src/app.js"
   },
   "keywords": [],
   "author": "",
