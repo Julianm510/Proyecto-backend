@@ -1,29 +1,37 @@
-import fs from "fs/promises";
+import { promises as fs } from 'fs';
+
 class ProductManager {
-    // static ultId = 0;
+    static ultId = 0;
+
     constructor(path) {
-
-
-        this.id = 0;
+        this.products = [];
         this.path = path;
     }
-    //validaciones
-    //1) validamos que los campos se agregaron:
-    async addProduct(title, description, price, img, code, stock) {
+
+    // Métodos:
+
+    async addProduct(nuevoObjeto) {
+        let {
+            title,
+            description,
+            price,
+            img,
+            code,
+            stock
+        } = nuevoObjeto;
+
         if (!title || !description || !price || !img || !code || !stock) {
-            console.log("Todos los campos deben ser obligatorios")
+            console.log("Todos los campos son obligatorios, completalo o moriras en 24 hs");
             return;
         }
-        const products = await this.getProducts();
-        //validamos que el código sea unico
-        if (products.some(item => item.code === code)) {
-            console.log("Atención el código debe ser unico")
+
+        if (this.products.some(item => item.code === code)) {
+            console.log("El codigo debe ser unico, rata de dos patas!");
             return;
         }
 
         const newProduct = {
-            // id: ++ProductManager.ultId,
-            id: this.id,
+            id: ++ProductManager.ultId,
             title,
             description,
             price,
@@ -31,116 +39,85 @@ class ProductManager {
             code,
             stock
         }
-        //lo agrego al array
-        products.push(newProduct);
-        this.id++;
-        await this.saveProducts(products);
 
-    }
+        this.products.push(newProduct);
 
-    async saveProducts(products) {
-        await fs.writeFile(this.path, JSON.stringify(products, null, 2));
+        // Guardamos el array en el archivo:
+
+        await this.guardarArchivo(this.products);
+
     }
 
     async getProducts() {
         try {
-            const data = await fs.readFile(this.path, "utf-8");
-            return JSON.parse(data);
-        } catch {
-            return [];
+            // Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo.
+
+            const arrayProductos = await this.leerArchivo();
+            return arrayProductos;
+        } catch (error) {
+            console.log("Error al leer el archivo", error);
         }
 
     }
-
-
-
-
-
-    async getProduct() {
-        return await this.getProducts();
-
-    }
-
 
     async getProductById(id) {
-        const productos = await this.getProducts();
-        const product = productos.find(item => item.id === id)
-
-        if (!product) {
-            console.log("Producto no encontrado")
-        } else {
-            console.log("Producto encontrado", product)
-        }
-    }
-
-    async updateProduct(id, updateFields) {
         try {
-            const data = await fs.readFile(this.path, "utf-8");
-            const products = JSON.parse(data);
+            const arrayProductos = await this.leerArchivo();
+            const buscado = arrayProductos.find(item => item.id === id);
 
-            const index = products.find(p => p.id === id)
-            if (!index) console.log("producto no encontrado")
-
-
-
-            products[index] = {
-                ...products[index],
-                ...updateFields
+            if (!buscado) {
+                console.log("Producto no encontrado");
+            } else {
+                console.log("Siii, lo encontramos! ");
+                return buscado;
             }
 
-            await fs.readFile("./productos.json", JSON.stringify(products, null, 2))
-            console.log("producto actualizado correctamente");
+        } catch (error) {
+            console.log("Error al leer el archivo ", error);
+        }
 
+    }
 
+    // Nuevos metodos desafio 2:
+
+    async leerArchivo() {
+        try {
+            const respuesta = await fs.readFile(this.path, "utf-8");
+            const arrayProductos = JSON.parse(respuesta);
+            return arrayProductos;
 
         } catch (error) {
-            console.log(`no se pudo actualizar el producto`)
+            console.log("Error al leer un archivo", error);
         }
     }
 
+    async guardarArchivo(arrayProductos) {
+        try {
+            await fs.writeFile(this.path, JSON.stringify(arrayProductos, null, 2));
+        } catch (error) {
+            console.log("Error al guardar el archivo", error);
+        }
+    }
+
+    // Actualizamos algun producto:
+    async updateProduct(id, productoActualizado) {
+        try {
+            const arrayProductos = await this.leerArchivo();
+
+            const index = arrayProductos.findIndex(item => item.id === id);
+
+            if (index !== -1) {
+                // Puedo usar el método de array splice para reemplazar el objeto en la posicion del index:
+                arrayProductos.splice(index, 1, productoActualizado);
+                await this.guardarArchivo(arrayProductos);
+            } else {
+                console.log("no se encontró el producto");
+            }
+
+        } catch (error) {
+            console.log("Error al actualizar el producto", error);
+        }
+    }
 }
 
-
-// const productos = await this.getProducts();
-// const nuevosProducts = productos.filter(item => item.id !== id)
-
-
-// if (productos.length === nuevosProducts.length) {
-//     console.log("producto no encontrado")
-// } else { console.log("producto eliminado", nuevosProducts) }
-
-// await this.saveProducts(nuevosProducts);
-
-
-
-
-
-// try {
-//     await fs.unlink("./productos.json");
-//     console.log("Archivo eliminado");
-// } catch (error) {
-//     console.log("El archivo no existe o ya fue eliminado");
-// }
-
-const manager = new ProductManager("./productos.json")
-
-
-
-// await manager.addProduct("Producto prueba", "este es un producto de prueba", 500, "no img", "abc123", 25)
-await manager.addProduct("fideos", "mostacholes", 1000, "no img", "abc128", 55)
-await manager.addProduct("arroz", "doble carolina", 1500, "no img", "abc125", 55)
-// await manager.addProduct("mostacholes", 1000, "no img", "abc124", 55)
-// await manager.addProduct("arroz", "doble carolina", 1500, "no img", "abc120", 55)
-// await manager.addProduct("arroz gallo", "doble carolina", 1500, "no img", "abc127", 70)
-// await manager.addProduct("coca cola", "2Lts", 3500, "no img", "abc129", 100)
-
-
-
-console.log(await manager.getProduct())
-
-// await manager.getProductById(0)
-// await manager.deleteProduct(1)
-await manager.updateProduct(1, {
-    price: 5000,
-    stock: 20
-});
+export default ProductManager;
