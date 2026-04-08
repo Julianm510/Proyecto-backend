@@ -4,8 +4,8 @@ import express from "express";
 const app = express();
 const PUERTO = 8080;
 
-import ProductManager from "./product-manager.js";
-const productManager = new ProductManager("./src/productos.json");
+import ProductManager from "./controllers/product-manager.js";
+const productManager = new ProductManager("./src/models/productos.json");
 
 //Middlewares
 app.use(express.json());
