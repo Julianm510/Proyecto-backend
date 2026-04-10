@@ -12,12 +12,13 @@
 
 //Ejercicios de practica: Mascotas y Usuarios.
 
+//para inportar con Common JS:
+//const express = require("express");
+
 import express from "express";
 const app = express();
 const PUERTO = 8080;
 
-//para inportar con Common JS:
-//const express = require("express");
 
 
 //vincular las rutas:
